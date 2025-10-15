@@ -11,7 +11,7 @@ relay.mode = minimalmodbus.MODE_RTU
 
 
 # turn on 1 relay
-#relay.write_bit(registeraddress=0x0104, value=1,functioncode=5) # wrote single relay
+#relay.write_bit(registeraddress=0x0104, value=0xFF00,functioncode=5) # wrote single relay
 
 
 # read relay stauts
