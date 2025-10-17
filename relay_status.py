@@ -1,6 +1,8 @@
 import minimalmodbus
 import time
 
+
+
 relay = minimalmodbus.Instrument('/dev/ttyRS485', 1)  # slave address = 1
 relay.serial.baudrate = 9600
 relay.serial.bytesize = 8
@@ -8,10 +10,6 @@ relay.serial.parity = minimalmodbus.serial.PARITY_NONE
 relay.serial.stopbits = 1
 relay.serial.timeout = 1
 relay.mode = minimalmodbus.MODE_RTU
-
-
-# turn on 1 relay
-#relay.write_bit(registeraddress=0x0104, value=0xFF00,functioncode=5) # wrote single relay
 
 
 # read relay stauts
