@@ -9,16 +9,22 @@ class RelayControl:
 
 
     def uniform_distribute(self,m,n):
+        if n==0:
+            return []
         if n==1:
             return [(m+1)//2]
 
         if n>=m:
             return list(range(1,m+1))
 
-
         real = [(1+i*(m-1)/(n-1)) for i in range (0,n)]
         pos = [int(round(x)) for x in real]
         return pos
+
+
+    def close_all_relay(self):
+        address = 0x00FF
+        self.relay.write_bit(registeraddress=address, value=0x0000, functioncode=5)
 
 
     def open_certain_relay(self, m, n):
