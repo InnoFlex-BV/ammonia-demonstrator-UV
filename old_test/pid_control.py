@@ -15,8 +15,8 @@ class PIDController:
 
 
     def compute(self, setpoint, measurement):
-        current.time = time.time()
-        dt = current.time-self.prev_time
+        current_time = time.time()
+        dt = current_time-self.prev_time
         if dt<0:
             dt = 1
         error = setpoint - measurement
@@ -30,7 +30,7 @@ class PIDController:
         return output
 
 
-if __name__ = "__main__":
+if __name__ == "__main__":
     PID = PIDController(Kp = 2, Ki = 0.1, Kd = 0.5)
     uv_heater = HeaterController()
     set_point_source = SetPointMQTT("192.168.0.68", "master/UV/UV_temp")
