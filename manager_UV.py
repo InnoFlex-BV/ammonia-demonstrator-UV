@@ -5,7 +5,7 @@ import socket
 import time
 
 
-broker_ip = "192.168.0.89"
+broker_ip = "192.168.0.89" # rev_Pi has no mDNS support, so name with ".local" cannot work. SO it need to use number IP such as "192.168.x.x"
 topic_control = "master/uv/control"
 topic_status = "slave/uv/status"
 main_script_path  = "/home/innoflex/ammonia-demonstrator-UV/main_test.py"
@@ -55,7 +55,7 @@ while True:
         print("DNS not ready.")
     except Exception as e:
         print(f"Connection Failed: {e}")
-        
+
     time.sleep(5)
 
 client.loop_forever()

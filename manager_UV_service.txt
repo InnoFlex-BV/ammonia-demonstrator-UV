@@ -31,3 +31,8 @@ sudo systemctl restart manager_UVservice
 sudo systemctl status manager_UV.service 
 
 the status should be active then
+
+
+for furthur detail check please use following command in terminal:
+
+sudo journalctl -u manager_UV.service -f

@@ -2,7 +2,7 @@ import random
 import time
 import paho.mqtt.client as mqtt
 
-broker_ip = "ammonia-master.local" 
+broker_ip = "192.168.0.89" 
 topic = "slave/uv/test"
 client_id = "UV_Pi_manager"
 
