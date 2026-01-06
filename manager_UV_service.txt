@@ -1,0 +1,33 @@
+## just a back-up of manager_UV_servie
+
+for replication, please create a file with following content in:
+innoflex@ammonia-UV:/etc/systemd/system $ sudo nano manager_UV.service
+
+please keep this file path for further change
+"""
+
+[Unit]
+Description=UV MQTT Manager
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/python3 -u /home/innoflex/ammonia-demonstrator-UV/manager_UV.py
+WorkingDirectory=/home/innoflex/ammonia-demonstrator-UV
+# StandardOutput=inherit
+# StandardError=inherit
+Restart=always
+RestartSec=5
+User=root
+
+[Install]
+WantedBy=multi-user.target
+
+"""
+
+and run following code in terminal(after every change):
+
+sudo systemctl daemon-reload
+sudo systemctl restart manager_UVservice 
+sudo systemctl status manager_UV.service 
+
+the status should be active then
