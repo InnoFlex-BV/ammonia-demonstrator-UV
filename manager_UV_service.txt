@@ -17,7 +17,8 @@ WorkingDirectory=/home/innoflex/ammonia-demonstrator-UV
 # StandardError=inherit
 Restart=always
 RestartSec=5
-User=root
+User=innoflex
+Group=innoflex
 
 [Install]
 WantedBy=multi-user.target
