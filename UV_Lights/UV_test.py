@@ -1,5 +1,7 @@
 import time
-from common_config import create_device, create_client
+import sys
+sys.path.append('/home/innoflex/ammonia-demonstrator-UV')
+from common_config import create_client
 from UV_Lights.converter_control import LED_Control
 
 

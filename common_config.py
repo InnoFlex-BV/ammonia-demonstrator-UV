@@ -9,7 +9,7 @@ serial_lock = threading.Lock()
 
 
 # initialize MQTT client
-broker_ip = "ammonia-master.local"
+broker_ip = "192.168.0.89" # mDNS is not working on RevPi_4
 common_client = mqtt.Client(client_id="UV_Pi")
 common_client.connect(broker_ip, 1883, 60)
 
