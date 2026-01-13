@@ -8,20 +8,20 @@ mqtt_client = create_client()
 mqtt_client.loop_start()
 
 """ create objects """
-LED_relay = None
+LED_converter = None
 
 
 
 try:
 
     """  initializations of devices """
-    LED_relay = LED_Control(slave_address=2, mqtt_topic="master/uv/uv_intensity", client = mqtt_client)
-    LED_relay.LED_initialzation()
+    LED_converter = LED_Control(slave_address=2, mqtt_topic="master/uv/uv_intensity", client = mqtt_client)
+    LED_converter.LED_initialzation()
     time.sleep(1)
 
     """  start multi thread """
     tasks = [
-        {"name": "LED Relay", "func": LED_relay.LED_control, "interval": 4, "next_run": 0},    
+        {"name": "LED Relay", "func": LED_converter.LED_control, "interval": 4, "next_run": 0},    
     ]
 
 
@@ -45,11 +45,11 @@ except Exception as e:
 finally:
     # cleanup all devices in RS485
        
-    if LED_relay is not None:
+    if LED_converter is not None:
         try:
-            LED_relay.LED_stop()
+            LED_converter.LED_stop()
         except Exception as e:
-            print(f"Error stopping pump: {e}")
+            print(f"Error stopping converter: {e}")
 
 
     print("All devices cleaned up.")
