@@ -1,0 +1,385 @@
+<mxfile host="app.diagrams.net" modified="2026-02-03" agent="Claude Code" version="21.0.0" etag="ammonia-uv-diagram" type="device">
+  <diagram name="System Architecture" id="ammonia-uv-architecture">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1200" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title -->
+        <mxCell id="title" value="&lt;b&gt;Ammonia Demonstrator UV Module - System Architecture&lt;/b&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=20;" vertex="1" parent="1">
+          <mxGeometry x="450" y="20" width="500" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- External Systems Group -->
+        <mxCell id="external-group" value="External Systems" style="swimlane;horizontal=1;startSize=30;fillColor=#dae8fc;strokeColor=#6c8ebf;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="80" width="200" height="280" as="geometry" />
+        </mxCell>
+
+        <!-- MQTT Broker -->
+        <mxCell id="mqtt-broker" value="&lt;b&gt;MQTT Broker&lt;/b&gt;&lt;br&gt;192.168.0.89:1883" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="external-group">
+          <mxGeometry x="40" y="50" width="120" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- Master Controller -->
+        <mxCell id="master-controller" value="&lt;b&gt;Master Controller&lt;/b&gt;&lt;br&gt;(External System)&lt;br&gt;&lt;br&gt;Sends intensity&lt;br&gt;commands (0-100%)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="external-group">
+          <mxGeometry x="20" y="160" width="160" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- Process Manager Group -->
+        <mxCell id="manager-group" value="Process Manager (Optional)" style="swimlane;horizontal=1;startSize=30;fillColor=#f5f5f5;strokeColor=#666666;dashed=1;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="280" y="80" width="240" height="200" as="geometry" />
+        </mxCell>
+
+        <!-- manager_UV.py -->
+        <mxCell id="manager-uv" value="&lt;b&gt;manager_UV.py&lt;/b&gt;&lt;br&gt;&lt;br&gt;• Runs as systemd service&lt;br&gt;• Listens: master/uv/control&lt;br&gt;• Commands: START/STOP&lt;br&gt;• Publishes: slave/uv/status" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="manager-group">
+          <mxGeometry x="20" y="40" width="200" height="120" as="geometry" />
+        </mxCell>
+
+        <!-- Main Application Group -->
+        <mxCell id="main-group" value="Main Application" style="swimlane;horizontal=1;startSize=30;fillColor=#d5e8d4;strokeColor=#82b366;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="560" y="80" width="480" height="280" as="geometry" />
+        </mxCell>
+
+        <!-- main_UV.py -->
+        <mxCell id="main-uv" value="&lt;b&gt;main_UV.py&lt;/b&gt;&lt;br&gt;&lt;br&gt;• Entry point&lt;br&gt;• Signal handlers (SIGINT/SIGTERM)&lt;br&gt;• 4-second task loop&lt;br&gt;• Graceful shutdown" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="main-group">
+          <mxGeometry x="20" y="40" width="180" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- LED_Control -->
+        <mxCell id="led-control" value="&lt;b&gt;LED_Control&lt;/b&gt;&lt;br&gt;(converter_control.py)&lt;br&gt;&lt;br&gt;• MQTT callback handler&lt;br&gt;• Intensity % → mV conversion&lt;br&gt;• Modbus register writes&lt;br&gt;• 8 channel control" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="main-group">
+          <mxGeometry x="260" y="40" width="180" height="120" as="geometry" />
+        </mxCell>
+
+        <!-- common_config.py -->
+        <mxCell id="common-config" value="&lt;b&gt;common_config.py&lt;/b&gt;&lt;br&gt;&lt;br&gt;• serial_lock (thread safety)&lt;br&gt;• create_device() - Modbus factory&lt;br&gt;• create_client() - MQTT factory&lt;br&gt;• RS485 buffer clearing" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="main-group">
+          <mxGeometry x="140" y="170" width="200" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- Hardware Interface Group -->
+        <mxCell id="hardware-group" value="Hardware Layer" style="swimlane;horizontal=1;startSize=30;fillColor=#ffe6cc;strokeColor=#d79b00;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="560" y="400" width="480" height="200" as="geometry" />
+        </mxCell>
+
+        <!-- RS485 Port -->
+        <mxCell id="rs485-port" value="&lt;b&gt;RS485 Serial Port&lt;/b&gt;&lt;br&gt;/dev/ttyRS485&lt;br&gt;&lt;br&gt;Modbus RTU&lt;br&gt;9600 baud, 8N1" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="hardware-group">
+          <mxGeometry x="20" y="50" width="160" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- LED Converter -->
+        <mxCell id="led-converter" value="&lt;b&gt;LED Converter&lt;/b&gt;&lt;br&gt;Modbus Slave Address: 2&lt;br&gt;&lt;br&gt;8x Analog Outputs&lt;br&gt;0-10V (0-10000mV)&lt;br&gt;Registers: 0x0000-0x0007" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="hardware-group">
+          <mxGeometry x="260" y="40" width="180" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- UV LEDs -->
+        <mxCell id="uv-leds" value="&lt;b&gt;UV LED Array&lt;/b&gt;&lt;br&gt;(8 Channels)" style="shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="hardware-group">
+          <mxGeometry x="350" y="150" width="110" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- MQTT Topics Legend -->
+        <mxCell id="topics-group" value="MQTT Topics" style="swimlane;horizontal=1;startSize=25;fillColor=#f5f5f5;strokeColor=#666666;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="400" width="200" height="200" as="geometry" />
+        </mxCell>
+
+        <mxCell id="topic-intensity" value="master/uv/uv_intensity&lt;br&gt;(0-100% intensity)" style="text;html=1;strokeColor=#82b366;fillColor=#d5e8d4;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=1;spacing=5;" vertex="1" parent="topics-group">
+          <mxGeometry x="10" y="35" width="180" height="40" as="geometry" />
+        </mxCell>
+
+        <mxCell id="topic-control" value="master/uv/control&lt;br&gt;(START/STOP)" style="text;html=1;strokeColor=#b85450;fillColor=#f8cecc;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=1;spacing=5;" vertex="1" parent="topics-group">
+          <mxGeometry x="10" y="85" width="180" height="40" as="geometry" />
+        </mxCell>
+
+        <mxCell id="topic-status" value="slave/uv/status&lt;br&gt;(RUNNING/STOPPED)" style="text;html=1;strokeColor=#d79b00;fillColor=#ffe6cc;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=1;spacing=5;" vertex="1" parent="topics-group">
+          <mxGeometry x="10" y="135" width="180" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- Data Flow Legend -->
+        <mxCell id="legend-group" value="Data Flow Legend" style="swimlane;horizontal=1;startSize=25;fillColor=#f5f5f5;strokeColor=#666666;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="280" y="400" width="240" height="200" as="geometry" />
+        </mxCell>
+
+        <mxCell id="legend-mqtt" value="MQTT Message" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="legend-group">
+          <mxGeometry x="90" y="40" width="100" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="legend-mqtt-line" value="" style="endArrow=classic;html=1;strokeColor=#0066CC;strokeWidth=2;dashed=1;" edge="1" parent="legend-group">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="20" y="50" as="sourcePoint" />
+            <mxPoint x="80" y="50" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="legend-modbus" value="Modbus RTU" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="legend-group">
+          <mxGeometry x="90" y="70" width="100" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="legend-modbus-line" value="" style="endArrow=classic;html=1;strokeColor=#CC6600;strokeWidth=2;" edge="1" parent="legend-group">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="20" y="80" as="sourcePoint" />
+            <mxPoint x="80" y="80" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="legend-process" value="Process Control" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="legend-group">
+          <mxGeometry x="90" y="100" width="100" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="legend-process-line" value="" style="endArrow=classic;html=1;strokeColor=#990099;strokeWidth=2;dashed=1;dashPattern=5 5;" edge="1" parent="legend-group">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="20" y="110" as="sourcePoint" />
+            <mxPoint x="80" y="110" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="legend-analog" value="Analog Signal" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="legend-group">
+          <mxGeometry x="90" y="130" width="100" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="legend-analog-line" value="" style="endArrow=classic;html=1;strokeColor=#009900;strokeWidth=2;" edge="1" parent="legend-group">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="20" y="140" as="sourcePoint" />
+            <mxPoint x="80" y="140" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="legend-function" value="Function Call" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="legend-group">
+          <mxGeometry x="90" y="160" width="100" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="legend-function-line" value="" style="endArrow=classic;html=1;strokeColor=#333333;strokeWidth=1;" edge="1" parent="legend-group">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="20" y="170" as="sourcePoint" />
+            <mxPoint x="80" y="170" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Connection Arrows -->
+
+        <!-- Master to Broker -->
+        <mxCell id="arrow-master-broker" value="" style="endArrow=classic;html=1;strokeColor=#0066CC;strokeWidth=2;dashed=1;exitX=0.5;exitY=0;entryX=0.5;entryY=1;" edge="1" parent="1" source="master-controller" target="mqtt-broker">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="400" y="400" as="sourcePoint" />
+            <mxPoint x="450" y="350" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="arrow-master-broker-label" value="Publish&lt;br&gt;uv_intensity" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;" vertex="1" connectable="0" parent="arrow-master-broker">
+          <mxGeometry x="-0.2" y="1" relative="1" as="geometry">
+            <mxPoint x="-45" y="10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Broker to LED_Control -->
+        <mxCell id="arrow-broker-led" value="" style="endArrow=classic;html=1;strokeColor=#0066CC;strokeWidth=2;dashed=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="mqtt-broker" target="led-control">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="400" y="400" as="sourcePoint" />
+            <mxPoint x="450" y="350" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="260" y="170" />
+              <mxPoint x="260" y="180" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="arrow-broker-led-label" value="Subscribe&lt;br&gt;master/uv/uv_intensity" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;" vertex="1" connectable="0" parent="arrow-broker-led">
+          <mxGeometry x="-0.2" y="1" relative="1" as="geometry">
+            <mxPoint x="55" y="-25" as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Broker to Manager -->
+        <mxCell id="arrow-broker-manager" value="" style="endArrow=classic;startArrow=classic;html=1;strokeColor=#0066CC;strokeWidth=2;dashed=1;exitX=1;exitY=0.25;entryX=0;entryY=0.5;" edge="1" parent="1" source="mqtt-broker" target="manager-uv">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="400" y="400" as="sourcePoint" />
+            <mxPoint x="450" y="350" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="arrow-broker-manager-label" value="control/status" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;" vertex="1" connectable="0" parent="arrow-broker-manager">
+          <mxGeometry x="-0.1" y="1" relative="1" as="geometry">
+            <mxPoint x="-5" y="-11" as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Manager to main_UV -->
+        <mxCell id="arrow-manager-main" value="" style="endArrow=classic;html=1;strokeColor=#990099;strokeWidth=2;dashed=1;dashPattern=5 5;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="manager-uv" target="main-uv">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="400" y="400" as="sourcePoint" />
+            <mxPoint x="450" y="350" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="arrow-manager-main-label" value="subprocess&lt;br&gt;SIGINT/SIGTERM" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;" vertex="1" connectable="0" parent="arrow-manager-main">
+          <mxGeometry x="-0.1" y="1" relative="1" as="geometry">
+            <mxPoint y="-21" as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- main_UV to LED_Control -->
+        <mxCell id="arrow-main-led" value="" style="endArrow=classic;html=1;strokeColor=#333333;strokeWidth=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="main-uv" target="led-control">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="400" y="400" as="sourcePoint" />
+            <mxPoint x="450" y="350" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="arrow-main-led-label" value="LED_control()&lt;br&gt;every 4 sec" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;" vertex="1" connectable="0" parent="arrow-main-led">
+          <mxGeometry x="-0.1" y="1" relative="1" as="geometry">
+            <mxPoint y="-21" as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- LED_Control to common_config -->
+        <mxCell id="arrow-led-config" value="" style="endArrow=classic;startArrow=classic;html=1;strokeColor=#333333;strokeWidth=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="led-control" target="common-config">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="400" y="400" as="sourcePoint" />
+            <mxPoint x="450" y="350" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="arrow-led-config-label" value="create_device()&lt;br&gt;serial_lock" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;" vertex="1" connectable="0" parent="arrow-led-config">
+          <mxGeometry x="-0.1" y="1" relative="1" as="geometry">
+            <mxPoint x="50" y="1" as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- main_UV to common_config -->
+        <mxCell id="arrow-main-config" value="" style="endArrow=classic;html=1;strokeColor=#333333;strokeWidth=1;exitX=0.5;exitY=1;entryX=0;entryY=0.5;" edge="1" parent="1" source="main-uv" target="common-config">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="400" y="400" as="sourcePoint" />
+            <mxPoint x="450" y="350" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="arrow-main-config-label" value="create_client()" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;" vertex="1" connectable="0" parent="arrow-main-config">
+          <mxGeometry x="-0.1" y="1" relative="1" as="geometry">
+            <mxPoint x="-30" y="-11" as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- common_config to RS485 -->
+        <mxCell id="arrow-config-rs485" value="" style="endArrow=classic;html=1;strokeColor=#CC6600;strokeWidth=2;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="common-config" target="rs485-port">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="400" y="400" as="sourcePoint" />
+            <mxPoint x="450" y="350" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="arrow-config-rs485-label" value="Modbus RTU&lt;br&gt;write_registers()" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;" vertex="1" connectable="0" parent="arrow-config-rs485">
+          <mxGeometry x="-0.1" y="1" relative="1" as="geometry">
+            <mxPoint x="-60" y="1" as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- RS485 to LED Converter -->
+        <mxCell id="arrow-rs485-converter" value="" style="endArrow=classic;html=1;strokeColor=#CC6600;strokeWidth=2;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="rs485-port" target="led-converter">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="400" y="550" as="sourcePoint" />
+            <mxPoint x="450" y="500" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="arrow-rs485-converter-label" value="Slave Addr: 2&lt;br&gt;Regs: 0x0000" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;" vertex="1" connectable="0" parent="arrow-rs485-converter">
+          <mxGeometry x="-0.1" y="1" relative="1" as="geometry">
+            <mxPoint y="-21" as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- LED Converter to UV LEDs -->
+        <mxCell id="arrow-converter-leds" value="" style="endArrow=classic;html=1;strokeColor=#009900;strokeWidth=2;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="led-converter" target="uv-leds">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="400" y="550" as="sourcePoint" />
+            <mxPoint x="450" y="500" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="arrow-converter-leds-label" value="0-10V" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;" vertex="1" connectable="0" parent="arrow-converter-leds">
+          <mxGeometry x="-0.1" y="1" relative="1" as="geometry">
+            <mxPoint x="20" y="-9" as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Data Flow Box -->
+        <mxCell id="flow-group" value="Data Flow" style="swimlane;horizontal=1;startSize=25;fillColor=#f5f5f5;strokeColor=#666666;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="1080" y="80" width="280" height="520" as="geometry" />
+        </mxCell>
+
+        <mxCell id="flow-1" value="1. Master Controller publishes&lt;br&gt;intensity (0-100%) to MQTT" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;spacingLeft=10;" vertex="1" parent="flow-group">
+          <mxGeometry x="10" y="35" width="260" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="flow-2" value="2. LED_Control receives message&lt;br&gt;via MQTT callback" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;spacingLeft=10;" vertex="1" parent="flow-group">
+          <mxGeometry x="10" y="95" width="260" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="flow-3" value="3. Validates intensity (0-100%)&lt;br&gt;Converts: intensity × 100 = mV" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;spacingLeft=10;" vertex="1" parent="flow-group">
+          <mxGeometry x="10" y="155" width="260" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="flow-4" value="4. LED_control() called every 4 sec&lt;br&gt;Checks for new intensity value" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;spacingLeft=10;" vertex="1" parent="flow-group">
+          <mxGeometry x="10" y="215" width="260" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="flow-5" value="5. Acquires serial_lock&lt;br&gt;Thread-safe RS485 access" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;spacingLeft=10;" vertex="1" parent="flow-group">
+          <mxGeometry x="10" y="275" width="260" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="flow-6" value="6. Writes mV to 8 Modbus registers&lt;br&gt;(0x0000-0x0007) on slave 2" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;align=left;spacingLeft=10;" vertex="1" parent="flow-group">
+          <mxGeometry x="10" y="335" width="260" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="flow-7" value="7. LED Converter outputs&lt;br&gt;0-10V analog signal" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;spacingLeft=10;" vertex="1" parent="flow-group">
+          <mxGeometry x="10" y="395" width="260" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="flow-8" value="8. UV LEDs illuminate at&lt;br&gt;specified intensity" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=10;" vertex="1" parent="flow-group">
+          <mxGeometry x="10" y="455" width="260" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Flow arrows -->
+        <mxCell id="flow-arrow-1" value="" style="endArrow=classic;html=1;strokeColor=#666666;strokeWidth=1;" edge="1" parent="flow-group">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="140" y="85" as="sourcePoint" />
+            <mxPoint x="140" y="95" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="flow-arrow-2" value="" style="endArrow=classic;html=1;strokeColor=#666666;strokeWidth=1;" edge="1" parent="flow-group">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="140" y="145" as="sourcePoint" />
+            <mxPoint x="140" y="155" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="flow-arrow-3" value="" style="endArrow=classic;html=1;strokeColor=#666666;strokeWidth=1;" edge="1" parent="flow-group">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="140" y="205" as="sourcePoint" />
+            <mxPoint x="140" y="215" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="flow-arrow-4" value="" style="endArrow=classic;html=1;strokeColor=#666666;strokeWidth=1;" edge="1" parent="flow-group">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="140" y="265" as="sourcePoint" />
+            <mxPoint x="140" y="275" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="flow-arrow-5" value="" style="endArrow=classic;html=1;strokeColor=#666666;strokeWidth=1;" edge="1" parent="flow-group">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="140" y="325" as="sourcePoint" />
+            <mxPoint x="140" y="335" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="flow-arrow-6" value="" style="endArrow=classic;html=1;strokeColor=#666666;strokeWidth=1;" edge="1" parent="flow-group">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="140" y="385" as="sourcePoint" />
+            <mxPoint x="140" y="395" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="flow-arrow-7" value="" style="endArrow=classic;html=1;strokeColor=#666666;strokeWidth=1;" edge="1" parent="flow-group">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="140" y="445" as="sourcePoint" />
+            <mxPoint x="140" y="455" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
